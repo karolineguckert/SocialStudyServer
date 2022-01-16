@@ -1,0 +1,50 @@
+version: "3.9"
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+
+services:
+  socialStudyBack:
+    working_dir: /usr/src/socialstudyback
+    image: node:lts-alpine
+    ports:
+      - "8080:8080"
+    #MeuPC:Container
+    environment:
+      SERVER_PORT: "8080"
+      SECRET: "mysecret"
+    volumes:
+      - ./src/:/usr/src/socialstudyback/src/
+      - ./public/:/usr/src/socialstudyback/public/
+      - ./node_modules/:/usr/src/socialstudyback/node_modules/
+      - ./package.json:/usr/src/socialstudyback/package.json
+      - ./package-lock.json:/usr/src/socialstudyback/package-lock.json
+    # command - serve para indicar qual comando deve ser executado ao rodar o container
+    command: sh -c "npm install && npm start"
+    # Vinculando minha pasta do PC com o do container
+    # ./src - Vincula apenas o arquivo
+    # ./src/ - Coloca tudo que está dentro de src para uma nova pasta
+
+  socialStudyBanco:
+    image: postgres
+    ports:
+      - "8081:5432"
+    environment:
+      POSTGRES_DB: "social_study"
+      POSTGRES_PASSWORD: "12kAL21!"
+      POSTGRES_USER: "karol"
+      POSTGRES_HOST: "172.29.192.1"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+
+  socialStudyPgAdmin:
+    image: dpage/pgadmin4
+    ports:
+      - "8082:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "12luara34"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin/
