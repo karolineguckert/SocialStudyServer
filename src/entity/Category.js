@@ -24,7 +24,7 @@ Category.init({
     modelName: 'category'
 });
 
-Category.belongsTo(Topic, {foreignKey:'id_topic', allowNull: true});
+Category.hasOne(Topic, {foreignKey:'id_topic', allowNull: true});
 
 console.log(Category === sequelize.models.category);
 Category.sync().then();

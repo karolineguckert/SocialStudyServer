@@ -13,8 +13,8 @@ router.post('/login', function(req, res, next) {
 
     function validateId(userId) {
         if (userId !== -1){
-            console.log("process",process.env.SECRET)
-            const token = jwt.sign({ userId }, process.env.SECRET, {
+            console.log("process",process.env.SERVER_SECRET)
+            const token = jwt.sign({ userId }, process.env.SERVER_SECRET, {
                 expiresIn: 300 // expires in 5min
             });
             return res.json({ auth: true, token: token });

@@ -1,33 +1,32 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../helper/DataBaseConnection');
-const Stamps = require("./Stamps");
-const UserLevel = require("./UserLevel");
+const Question = require("./Question");
 
-class User extends Model {}
+class Reference extends Model {}
 
-User.init({
-    name: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-
-    email: {
+Reference.init({
+    title: {
         type: DataTypes.STRING,
         allowNull: false
     },
 
-    nickname: {
+    publicationCompany: {
         type: DataTypes.STRING,
         allowNull: false
     },
 
-    password: {
+    authors: {
         type: DataTypes.STRING,
         allowNull: false
     },
 
-    avatar: {
-        type: DataTypes.TEXT,
+    publicationDate: {
+        type: DataTypes.DATE,
+        allowNull: false
+    },
+
+    additionalInformation: {
+        type: DataTypes.STRING,
         allowNull: true
     },
 
@@ -42,13 +41,12 @@ User.init({
     },
 }, {
     sequelize,
-    modelName: 'users'
+    modelName: 'reference'
 });
 
-User.hasOne(Stamps, {foreignKey:'id_user_stamps', allowNull: true});
-User.hasOne(UserLevel, {foreignKey:'id_user_level', allowNull: false});
+Reference.hasOne(Question, {foreignKey:'id_question', allowNull: true});
 
-console.log(User === sequelize.models.user);
-User.sync().then();
+console.log(Reference === sequelize.models.Reference);
+Reference.sync().then();
 
-module.exports = User;
+module.exports = Reference;

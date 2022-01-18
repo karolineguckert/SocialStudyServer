@@ -1,5 +1,6 @@
-version: "3.9"
+version: "3.9" #versão do docker-compose
 
+#Pasta dentro do docker usa para guardar dados que precisam ser mantidos mas não fazem parte do projeto
 volumes:
   postgres_data:
   pgadmin_data:
@@ -9,32 +10,40 @@ services:
     working_dir: /usr/src/socialstudyback
     image: node:lts-alpine
     ports:
-      - "8080:8080"
+      - "${SERVER_PORT}:${SERVER_PORT}"
     #MeuPC:Container
     environment:
-      SERVER_PORT: "8080"
-      SECRET: "mysecret"
+      SERVER_PORT: "${SERVER_PORT}"
+      SERVER_SECRET: "${SERVER_SECRET}"
+      DB_NAME: "${DB_NAME}"
+      DB_PASSWORD: "${DB_PASSWORD}"
+      DB_USER: "${DB_USER}"
+      DB_HOST: "${DB_HOST}"
+      DB_PORT: "${DB_PORT}"
+      DB_DIALECT: "${DB_DIALECT}"
     volumes:
       - ./src/:/usr/src/socialstudyback/src/
       - ./public/:/usr/src/socialstudyback/public/
       - ./node_modules/:/usr/src/socialstudyback/node_modules/
       - ./package.json:/usr/src/socialstudyback/package.json
       - ./package-lock.json:/usr/src/socialstudyback/package-lock.json
-    # command - serve para indicar qual comando deve ser executado ao rodar o container
-    command: sh -c "npm install && npm start"
     # Vinculando minha pasta do PC com o do container
     # ./src - Vincula apenas o arquivo
     # ./src/ - Coloca tudo que está dentro de src para uma nova pasta
+    command: sh -c "npm install && npm start"
+    # command - serve para indicar qual comando deve ser executado ao rodar o container
+    depends_on:
+      - socialStudyBanco #Espera o container do banco estar pronto para iniciar
 
   socialStudyBanco:
     image: postgres
     ports:
-      - "8081:5432"
+      - "${DB_PORT}:5432"
     environment:
-      POSTGRES_DB: "social_study"
-      POSTGRES_PASSWORD: "12kAL21!"
-      POSTGRES_USER: "karol"
-      POSTGRES_HOST: "172.29.192.1"
+      POSTGRES_DB: "${DB_NAME}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_USER: "${DB_USER}"
+      POSTGRES_HOST: "${DB_HOST}"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
 
@@ -42,9 +51,11 @@ services:
   socialStudyPgAdmin:
     image: dpage/pgadmin4
     ports:
-      - "8082:80"
+      - "${ADMIN_PORT}:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: "admin@gmail.com"
-      PGADMIN_DEFAULT_PASSWORD: "12luara34"
+      PGADMIN_DEFAULT_EMAIL: "${ADMIN_EMAIL}"
+      PGADMIN_DEFAULT_PASSWORD: "${ADMIN_PASSWORD}"
     volumes:
       - pgadmin_data:/var/lib/pgadmin/
+    depends_on:
+      - socialStudyBanco
