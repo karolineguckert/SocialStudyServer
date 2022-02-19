@@ -2,6 +2,7 @@ const bodyParser = require('body-parser')
 const express = require('express');
 const dotenv = require('dotenv');
 const server = express();
+const cors = require('cors')
 
 /*
   Server configurations
@@ -16,6 +17,7 @@ dotenv.config();
   Convert a body in json for an object js
  */
 server.use(bodyParser.json())
+server.use(cors())
 server.use(bodyParser.urlencoded({ extended: true }));
 
 server.use(function(req, res, next) {

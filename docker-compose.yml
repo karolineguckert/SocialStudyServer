@@ -34,6 +34,10 @@ services:
     # command - serve para indicar qual comando deve ser executado ao rodar o container
     depends_on:
       - socialStudyBanco #Espera o container do banco estar pronto para iniciar
+    links:
+      - socialStudyBanco
+    networks:
+      - socialstudy
 
   socialStudyBanco:
     image: postgres
@@ -46,7 +50,8 @@ services:
       POSTGRES_HOST: "${DB_HOST}"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-
+    networks:
+      - socialstudy
 
   socialStudyPgAdmin:
     image: dpage/pgadmin4
@@ -59,3 +64,14 @@ services:
       - pgadmin_data:/var/lib/pgadmin/
     depends_on:
       - socialStudyBanco
+    networks:
+      - socialstudy
+
+# define uma rede local entre varios conteiners, faz todos os conteiners nessa network funcionar como se fosse em localhost
+networks:
+  socialstudy:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "${DB_HOST}/24"
+      driver: default

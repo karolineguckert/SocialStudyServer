@@ -3,7 +3,7 @@ const router = express.Router();
 const UserRepository = require('../repository/UserRepository')
 const jwt = require('jsonwebtoken');
 
-router.put('/usuario/:teste', function(req, res, next) {
+router.put('/', function(req, res, next) {
     UserRepository.insertUser(req.body);
     res.send({success: true, code: 200});
 });
@@ -13,13 +13,12 @@ router.post('/login', function(req, res, next) {
 
     function validateId(userId) {
         if (userId !== -1){
-            console.log("process",process.env.SERVER_SECRET)
             const token = jwt.sign({ userId }, process.env.SERVER_SECRET, {
                 expiresIn: 300 // expires in 5min
             });
             return res.json({ auth: true, token: token });
         } else {
-            console.log("Não existe")
+            return res.json({ auth: false, token: "" });
         }
     }
 });
