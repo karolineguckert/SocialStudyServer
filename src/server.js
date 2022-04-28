@@ -37,16 +37,18 @@ server.use(function(req, res, next) {
   Routers path
  */
 const userRouter = require('./controller/UserController');
+const questionRouter = require('./controller/QuestionController');
+
 // const categoryRouter = require('./controller/CategoryLevel');
 // const difficultyLevelRouter = require('./controller/DifficultyLevelController');
 // const messageRouter = require('./controller/MessageController');
-// const questionRouter = require('./controller/QuestionController');
 // const referenceRouter =
 
 /*
   Routers definition
  */
 server.use('/user', userRouter);
+server.use('/question', questionRouter)
 // server.use('/category', categoryRouter);
 // server.use('/difficulty', difficultyLevelRouter);
 // server.use('/message', messageRouter);

@@ -21,11 +21,6 @@ Question.init({
         allowNull: false
     },
 
-    explication: {
-        type: DataTypes.TEXT,
-        allowNull: false
-    },
-
     createdAt: {
         allowNull: true,
         type: DataTypes.DATE,

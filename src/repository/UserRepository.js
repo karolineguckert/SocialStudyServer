@@ -1,6 +1,8 @@
 const User = require("../entity/User");
+// const { Op } = require('@sequelize/core');
 
-async function insertUser(req) {
+
+async function insert(req) {
     let user = await
         User.create({
                   email: req.email,
@@ -11,7 +13,11 @@ async function insertUser(req) {
         });
 }
 
-async function deleteUser(req) {
+async function getAll(req) {
+    return  await User.findAll();
+}
+
+async function remove(req) {
     await User.destroy({
         where: {
             name: req.authorName,
@@ -19,7 +25,7 @@ async function deleteUser(req) {
     });
 }
 
-async function updateUser(req) {
+async function update(req) {
     await User.update({name: req.authorName}, {
         where: {
             name: req.oldAuthorName,
@@ -27,7 +33,7 @@ async function updateUser(req) {
     });
 }
 
-async function loginUser(req) {
+async function login(req) {
     let user = await
         User.findOne({
             where:{
@@ -42,4 +48,4 @@ async function loginUser(req) {
     }
 }
 
-module.exports = {insertUser,deleteUser,updateUser,loginUser};
+module.exports = {insert, getAll, remove,update,login};
