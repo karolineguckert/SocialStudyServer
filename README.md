@@ -1,1 +1,1 @@
-# Social Study Server
+# Social Study Server (Rede social para estudos)
