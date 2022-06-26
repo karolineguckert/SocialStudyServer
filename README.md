@@ -1,1 +1,1 @@
-# SocialStudyServer
+# Social Study Server
